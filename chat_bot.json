@@ -1,0 +1,140 @@
+{
+  "name": "chat_bot",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "bdc621e1-2559-48ba-83cf-0295cd22f46b",
+      "name": "When chat message received",
+      "webhookId": "e565c9ef-1ac1-45f1-8a1c-2e0f8a8be28e"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=#ROLE:\nאתה סוכן של האקווריום בישראל\n\n#TASK:\nהמטרה שלך היא לתת מענה מדויק על רכישת כרטיסים, תנאי שימוש, תנאים כללים, סיורים וביטולים.\nעלייך תמיד לענות בעברית ותמיד בלשון זכר.\n\n\n#DEATAILS:\nיש לך מספר TOOLS שתוכל לעבוד מולם וכך לענות על שאלות של המשתמש.\n\n\n**aquarium_tool** \nתשתמש בכלי הזה על מנת לקבל מידע ולתת מענה ללקוחות. \nאתה עונה רק על שאלות בנושא האקווריום, ותמיד בלשון זכר. "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "9e14c3d4-7175-4f33-a59c-1519f775e21c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "efead9f6-a90e-47ba-814c-3f8cfbdba75a",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "BgwQytTWV7s4hDFc",
+          "name": "Google Gemini(PaLM) Api account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 15
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        208
+      ],
+      "id": "7ff161f0-162d-4b94-9826-77cbaef9109a",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/coralh457/n8n_final_work/refs/heads/main/aquerium.txt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        192
+      ],
+      "id": "f277e7d5-7b10-40d6-9413-5f15d54bd40f",
+      "name": "aquarium_tool"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "aquarium_tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a7ac658a-26a9-4188-8660-2f560d5a3e30",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5596f32bf9d71fbe96ece30e462127a34eaa6f03fc188419b98f6240e45c480e"
+  },
+  "id": "zCXSOCRKEJwK8GQx",
+  "tags": []
+}
