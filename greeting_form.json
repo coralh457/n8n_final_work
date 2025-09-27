@@ -1,0 +1,360 @@
+{
+  "name": "greeting_form",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "greeting form",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Recipient_name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Sender_name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Gender",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Male"
+                  },
+                  {
+                    "option": "Female"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Areas_of_interest",
+              "fieldType": "textarea",
+              "placeholder": "Lego, Cats, Dogs, Sport",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Recipient_email",
+              "placeholder": "coralh457@gmail.com",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Prompt",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "259e7e00-4d38-4f5d-bb9a-ff0b6c62dfc5",
+      "name": "On form submission",
+      "webhookId": "5aac2729-0b2f-428f-aeb5-661c397378da"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app7TC1MUJYwTzXHR",
+          "mode": "list",
+          "cachedResultName": "n8n_final_work",
+          "cachedResultUrl": "https://airtable.com/app7TC1MUJYwTzXHR"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblA6lm456nvIAIUO",
+          "mode": "list",
+          "cachedResultName": "greeting songs",
+          "cachedResultUrl": "https://airtable.com/app7TC1MUJYwTzXHR/tblA6lm456nvIAIUO"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.Recipient_name }}",
+            "sender_name": "={{ $json.Sender_name }}",
+            "gender": "={{ $json.Gender }}",
+            "Areas_of_interest": "={{ $json.Areas_of_interest }}",
+            "recipient_email": "={{ $json.Recipient_email }}",
+            "Prompt": "={{ $json.text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "sender_name",
+              "displayName": "sender_name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "gender",
+              "displayName": "gender",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Areas_of_interest",
+              "displayName": "Areas_of_interest",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "recipient_email",
+              "displayName": "recipient_email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Prompt",
+              "displayName": "Prompt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        848,
+        -128
+      ],
+      "id": "6e86fe80-e93d-4604-8f29-d2d73af9284b",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "cuxNz8dwEr5XexLH",
+          "name": "Airtable Personal Access Token account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.Prompt }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=אתה סוכן שכותב שירים בהתאם לנושאים שכותבים לך\nכל שיר תכתוב אותו בצורה נחמדה ומצחיקה \nתכתוב כל שיר 3 בתים ופזמון \nתכתוב רק את השיר ללא הערות נוספות"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        272,
+        16
+      ],
+      "id": "7b4f5ae3-8757-49b0-91ea-9e7ff7a8ad0a",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        144,
+        208
+      ],
+      "id": "7aea978b-d4c0-410f-a1d1-cca9b5cd7568",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "BgwQytTWV7s4hDFc",
+          "name": "Google Gemini(PaLM) Api account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combineBySql",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        592,
+        -160
+      ],
+      "id": "61566a18-1ae5-4f4e-8364-89effbad0822",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "subject": "new greeting ",
+        "textContent": "=the sender: {{ $json.fields.sender_name }}\nthe receiver: {{ $json.fields.Name }}\nthe song: {{ $json.fields.Prompt }}",
+        "sender": "coralh457@gmail.com",
+        "receipients": "coralh457@gmail.com",
+        "additionalFields": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.sendInBlue",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        -128
+      ],
+      "id": "b1c002da-2a82-48ef-8ca1-015118ff564b",
+      "name": "Send a transactional email",
+      "credentials": {
+        "sendInBlueApi": {
+          "id": "DTqe5ZUjmCmzdTqO",
+          "name": "Brevo account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "How fun we succeeded",
+        "completionMessage": "=The greeting is ready and will be sent in just a few seconds {{ $('Create a record').item.json.fields.Prompt }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.3,
+      "position": [
+        1264,
+        -128
+      ],
+      "id": "bc133f8f-7aa8-45d8-82ad-56124c6a0157",
+      "name": "Form",
+      "webhookId": "305fd9b6-cadf-424b-987f-de8b9c8124cd"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Send a transactional email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a transactional email": {
+      "main": [
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1b833749-efbd-440c-8139-e664b698fdc5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5596f32bf9d71fbe96ece30e462127a34eaa6f03fc188419b98f6240e45c480e"
+  },
+  "id": "GM1oqUIyo95SypGD",
+  "tags": []
+}
